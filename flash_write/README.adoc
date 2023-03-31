@@ -1,0 +1,171 @@
+= Akaria SDK-P BSP Flash Write sample code readme
+
+== Overview
+
+This sample code is for testing PMod SF3 and writing a boot program.
+
+== How to use
+
+=== Preparing the boot code
+. Building the boot code
++
+Run the command below to build the boot code and generate a header file that is a text version of the binary that will be written to Flash.
++
+....
+$ cd Akaria_NS_BSP
+$ rm -r build    #if the build directory already exists
+$ mkdir build && cd build
+$ cmake ../ -G Ninja -DARCH=riscv -DCROSS_COMPILE=riscv64-unknown-elf- -DCC=gcc -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=../test/sysroot/ -DDEFCONF=riscv_nsitexe_ns31_arty_flash
+$ ninja install
+$ cd ../test/akaria_ns31_arty/
+$ make bin_header
+....
++
+make generates elf files (akaria_ns_bsp.elf), binary files (akaria_ns_bsp.bin) and header file (akaria_ns_bsp_bin.h).
+
+. Copy akaria_ns_bsp_bin.h to "test/akaria_ns31_arty/flash_write" directory.
+
+ $ cp akaria_ns_bsp_bin.h flash_write/
+
+=== Preparing the Flash Write sample
+. Building the Flash Write sample code
++
+Run the command below to build the Flash Write sample code.
++
+....
+$ cd Akaria_NS_BSP
+$ rm -r build
+$ mkdir build && cd build
+$ cmake ../ -G Ninja -DARCH=riscv -DCROSS_COMPILE=riscv64-unknown-elf- -DCC=gcc -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=../test/sysroot/ -DDEFCONF=riscv_nsitexe_ns31_arty
+$ ninja install
+$ cd ../test/akaria_ns31_arty/flash_write
+$ make
+....
++
+make generates an elf file of the sample app that tests Flash's Write/Read and writes the above Boot Code to Flash.
+
+=== Running the Flash Write Sample App
+==== Launching the Flash Write Sample App
+
+. Set SW3(Boot ROM SPI) on the board to '0'
+
+. Connect the PC and Entry Kit with a USB cable
+
+. Connect the Entry Kit and Debugger
+
+. Launch "Open OCD"
+
+. Open Terminal. (Set baudrate to 9600 bps)
+
+. Launch GDB.
+
+ $ riscv64-unknown-elf-gdb flash_write.elf
+
+. Run the following command on GDB:
+
+ (gdb) set arch riscv:rv32
+ (gdb) target remote localhost:3333
+ (gdb) monitor reset halt
+ (gdb) load
+ (gdb) c
+
+. A menu appears in the terminal. Enter the command you want to run
++
+....
+Missing program header. AT_PHDR is not available.
+
+#####################################################################
+#                                                                   #
+#   A k a r i a   N S   B o a r d   S u p p o r t   P a c k a g e   #
+#                                                                   #
+#####################################################################
+
+ ==== Select ID to execute each function ================
+      ID        Discription
+ --------------------------------------------------------
+    * f :        Pmod SF3(SPI0 Flash) test
+    * w :        Write bootcode to Pmod SF3
+    * h :        Help
+ ========================================================
+Akaria>
+....
+
+==== Testing SPI Flash
+
+Launch the Flash Write sample app and run the 'f' command to perform a Write/Read test to PMod SF3.
+If reading and writing to PMod SF3 succeeds, the message "Flash Memory Tests Successful!" will be output.
+
+.example
+----
+Akaria> f
+
+Select: Pmod SF3(SPI0 Flash) test
+
+SPI Driver is polling mode.
+Starting Flash Memory Tests
+SPI Write Successful
+SPI Flash READ Command Successful
+SPI Flash Read Test Passed
+SPI Flash FAST READ Command Successful
+SPI Flash Fast Read test passed
+Flash Memory Tests Successful!
+
+Akaria>
+----
+
+==== Writing Boot Code
+Launch the Flash Write sample app and run the 'w' command to write the Boot Code to PMod SF3.
+If the boot code is written successfully, the message "Writing Flash Memory Successful!" will be output.
+
+.example
+----
+Akaria> w
+
+Select: Write bootcode to Pmod SF3
+
+SPI Driver is polling mode.
+SPI Initialize success.
+Flash writing... (0x0)
+Flash writing... (0x100)
+Flash writing... (0x200)
+...
+Flash writing... (0x24200)
+Flash writing... (0x24300)
+Flash writing... (0x24400)
+Verifying...
+Writing Flash Memory Successful!
+
+Akaria>
+----
+
+
+=== Boot from PMod SF3
+
+. Change the board switches as follows.
+* Set "NS31A Reset Vector" [SW1:SW0] to '10'
+* Set "Boot ROM SPI" [SW3] to '0'
+* Set "NS31A Boot Mode" [SW2] to '0'
+
+. Connect the PC and Entry Kit with a USB cable
+. Open Terminal. (Set baudrate to 9600 bps)
+. Push BTN0 to boot NS31A
+. A menu appears in the terminal. Enter the command you want to run
++
+....
+Missing program header. AT_PHDR is not available.
+
+#####################################################################
+#                                                                   #
+#   A k a r i a   N S   B o a r d   S u p p o r t   P a c k a g e   #
+#                                                                   #
+#####################################################################
+
+ ==== Select ID to execute each function ================
+      ID        Discription
+ --------------------------------------------------------
+    * 0 :        LED test
+    * t :        Print system clock
+    * h :        Help
+ ========================================================
+Akaria>
+....
