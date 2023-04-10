@@ -1,0 +1,12 @@
+= Softwares and Licenses
+
+== For flash write sample
+
+This library uses these softwares in flash_write/ directory.
+
+* MIT license
+  ** Xilinx Embedded Software (embeddedsw) Development
+    *** https://github.com/Xilinx/embeddedsw
+  ** Digilent Vivado library
+    *** https://github.com/Digilent/vivado-library
+
