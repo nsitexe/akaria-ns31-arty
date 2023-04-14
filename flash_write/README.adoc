@@ -12,7 +12,7 @@ This sample code is for testing PMod SF3 and writing a boot program.
 Run the command below to build the boot code and generate a header file that is a text version of the binary that will be written to Flash.
 +
 ....
-$ cd Akaria_NS_BSP
+$ cd akaria-bmetal
 $ rm -r build    #if the build directory already exists
 $ mkdir build && cd build
 $ cmake ../ -G Ninja -DARCH=riscv -DCROSS_COMPILE=riscv64-unknown-elf- -DCC=gcc -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=../test/sysroot/ -DDEFCONF=riscv_nsitexe_ns31_arty_flash
