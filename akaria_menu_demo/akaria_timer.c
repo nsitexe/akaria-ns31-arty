@@ -8,20 +8,7 @@
 // Return    Counter value
 /*-------------------------------------------------------------------------------------------------------*/
 unsigned int akaria_clock( void ){
-  volatile unsigned int *p = (unsigned int *)ADDR_MTIME_L;
-  volatile unsigned int t;
-  t = *p;
-  return t;
-}
-
-
-/*-------------------------------------------------------------------------------------------------------*/
-// Name      akaria_mcycle
-// Function  Getting the core timer count value from CSR. It's just low 32 bits
-// Return    Counter value
-/*-------------------------------------------------------------------------------------------------------*/
-unsigned int akaria_mcycle( void ){
-  volatile unsigned int *p = (unsigned int *)ADDR_MCYCLE;
+  volatile unsigned int *p = (unsigned int *)ADDR_MTIME;
   volatile unsigned int t;
   t = *p;
   return t;
@@ -61,11 +48,11 @@ void akaria_wait( unsigned int t ){
   unsigned int setclock = t * SET_TIMER_COUNT;
   unsigned int start, end;
 
-  start = akaria_mcycle();
-  end   = akaria_mcycle();
+  start = akaria_clock();
+  end   = akaria_clock();
   
   while( akaria_diff_clock(end, start) < setclock ){
-    end = akaria_mcycle();
+    end = akaria_clock();
   }
   return;
 }
@@ -83,25 +70,17 @@ void akaria_time_print( void ){
   unsigned int tmh;
 
 
-  tml_1  = *(volatile unsigned int *)ADDR_MTIME_L;
-  cycl_1 = *(volatile unsigned int *)ADDR_MCYCLE;
+  tml_1  = *(volatile unsigned int *)ADDR_MTIME;
 
-  tmh  = *(volatile unsigned int *)(ADDR_MTIME_L+0x4);
-  cych = *(volatile unsigned int *)ADDR_MCYCLE_H;
+  tmh  = *(volatile unsigned int *)(ADDR_MTIME+0x4);
 
-  tml_2  = *(volatile unsigned int *)ADDR_MTIME_L;
-  cycl_2 = *(volatile unsigned int *)ADDR_MCYCLE;
+  tml_2  = *(volatile unsigned int *)ADDR_MTIME;
   
   if( tml_2 < tml_1 ){
-    tmh  = *(volatile unsigned int *)(ADDR_MTIME_L+0x4);
-  }
-
-  if( cycl_2 < cycl_1 ){
-    cych = *(volatile unsigned int *)ADDR_MCYCLE_H;
+    tmh  = *(volatile unsigned int *)(ADDR_MTIME+0x4);
   }
 
   printf("[Sys Cycle]  0x%08x %08x cycle\n", tmh, tml_2);
-  printf("[CSR Cycle]  0x%08x %08x cycle\n", cych, cycl_2);
   
 }
 
