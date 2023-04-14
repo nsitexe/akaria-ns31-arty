@@ -1,4 +1,4 @@
-= Akaria SDK-P BSP Flash Write sample code readme
+= akaria-bmetal Flash Write sample code readme
 
 == Overview
 
