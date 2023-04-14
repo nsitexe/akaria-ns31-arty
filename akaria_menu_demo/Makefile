@@ -23,7 +23,7 @@ MFLAGS    = -march=rv32im -mabi=ilp32
 LFLAGS    = -static -L $(DIR_SYSROOT)/lib -Wl,-T,$(DIR_SYSROOT)/include/bmetal/generated/linker_gen.ld \
             -mcmodel=medany $(MFLAGS) -Xlinker -Map=$(MAP_FILE) \
             -Wl,--whole-archive,-lbmetal_crt,--no-whole-archive -lc
-INC_PATH  = -I../include 
+INC_PATH  = -I../include -I.
 CFLAGS    = -c -g -O2 $(INC_PATH) $(MFLAGS)
 AFLAGS    = -c -g -O2 $(INC_PATH) $(MFLAGS)
 DEFINES   =
