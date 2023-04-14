@@ -6,6 +6,14 @@
 
 /*********************************************************************************************
  *
+ * COMMON
+ *
+ *********************************************************************************************/
+#define akaria_read_reg(addr)          *(unsigned int *)(addr)
+#define akaria_write_reg(addr, value) *(unsigned int *)(addr) = (unsigned int)(value)
+
+/*********************************************************************************************
+ *
  * LED
  *
  *********************************************************************************************/
@@ -24,5 +32,24 @@
 extern void akaria_led_init(void);
 extern void akaria_led_on(unsigned int);
 extern void akaria_led_off(unsigned int);
+
+/*********************************************************************************************
+ *
+ * SPI
+ *
+ *********************************************************************************************/
+/* Interrupt Number */
+#define SPI0_EXTINT_NO     (11)         /* External Input[11] */
+
+/* SPI0 Select*/
+#define SPI0_SEL           (0xE4000000) /* SPI0 Mode Select Register */
+#define SPI0_SEL_XIP           (0x0) /* bit[1] = 0 */
+#define SPI0_SEL_STD           (0x2) /* bit[1] = 1 */
+
+/* SPI0 STD (0xE4004000) */
+#define SPI0_BASE_ADDR      (0xE4004000)
+
+/* spi driver transfer mode */
+#define XSPI_TRANSFER_POLLING_MODE
 
 #endif    // AKARIA_NS31_EKIT_H
