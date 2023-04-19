@@ -23,7 +23,7 @@ MFLAGS    = -march=rv32im -mabi=ilp32
 LFLAGS    = -static -L $(DIR_SYSROOT)/lib -Wl,-T,$(DIR_SYSROOT)/include/bmetal/generated/linker_gen.ld \
             -mcmodel=medany $(MFLAGS) -Xlinker -Map=$(MAP_FILE) \
             -Wl,--whole-archive,-lbmetal_crt,--no-whole-archive -lc
-INC_PATH  = -I../include -I.
+INC_PATH  = -I../include
 CFLAGS    = -c -g -O2 $(INC_PATH) $(MFLAGS)
 AFLAGS    = -c -g -O2 $(INC_PATH) $(MFLAGS)
 DEFINES   =
@@ -60,11 +60,10 @@ $(DIS_FILE): $(EXE_FILE)
 
 # Binary File to write SPI Flash
 $(BIN_FILE): $(EXE_FILE)
-	$(RV_PREFIX)objcopy -O binary --only-section=.reset --only-section=.init --only-section=.text \
-    --only-section=.fini --only-section=.comm --only-section=.initdata \
-    --only-section=.auxdata  --only-section=.rodata --only-section=.preinit_array \
-    --only-section=.init_array --only-section=.fini_array --only-section=.data \
-    --only-section=.sdata $(EXE_FILE) $(BIN_FILE)
+	$(RV_PREFIX)objcopy -O binary --only-section=.reset --only-section=.text\
+    --only-section=.comm --only-section=.initdata --only-section=.auxdata --only-section=.rodata\
+    --only-section=.init_array --only-section=.fini_array --only-section=.data --only-section=.sdata\
+ $(EXE_FILE) $(BIN_FILE)
 
 # Header file to write SPI Flash
 .PHONY: bin_header
