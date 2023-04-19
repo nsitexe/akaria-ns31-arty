@@ -29,10 +29,6 @@
 #define LED6 0x40
 #define LED7 0x80
 
-extern void akaria_led_init(void);
-extern void akaria_led_on(unsigned int);
-extern void akaria_led_off(unsigned int);
-
 /*********************************************************************************************
  *
  * SPI
