@@ -2,7 +2,7 @@
 
 == Overview
 
-This sample code is for testing PMod SF3 and writing a boot program.
+This sample code is for writing a boot program.
 
 == How to use
 
@@ -83,38 +83,14 @@ Missing program header. AT_PHDR is not available.
  ==== Select ID to execute each function ================
       ID        Discription
  --------------------------------------------------------
-    * f :        Pmod SF3(SPI0 Flash) test
     * w :        Write bootcode to Pmod SF3
     * h :        Help
  ========================================================
 Akaria>
 ....
 
-==== Testing SPI Flash
-
-Launch the Flash Write sample app and run the 'f' command to perform a Write/Read test to PMod SF3.
-If reading and writing to PMod SF3 succeeds, the message "Flash Memory Tests Successful!" will be output.
-
-.example
-----
-Akaria> f
-
-Select: Pmod SF3(SPI0 Flash) test
-
-SPI Driver is polling mode.
-Starting Flash Memory Tests
-SPI Write Successful
-SPI Flash READ Command Successful
-SPI Flash Read Test Passed
-SPI Flash FAST READ Command Successful
-SPI Flash Fast Read test passed
-Flash Memory Tests Successful!
-
-Akaria>
-----
-
 ==== Writing Boot Code
-Launch the Flash Write sample app and run the 'w' command to write the Boot Code to PMod SF3.
+Launch the Flash Write sample app and run the 'w' command to write the Boot Code to PModSF3.
 If the boot code is written successfully, the message "Writing Flash Memory Successful!" will be output.
 
 .example
@@ -123,7 +99,6 @@ Akaria> w
 
 Select: Write bootcode to Pmod SF3
 
-SPI Driver is polling mode.
 SPI Initialize success.
 Flash writing... (0x0)
 Flash writing... (0x100)
@@ -139,7 +114,7 @@ Akaria>
 ----
 
 
-=== Boot from PMod SF3
+=== Boot from PModSF3
 
 . Change the board switches as follows.
 * Set "NS31A Reset Vector" [SW1:SW0] to '10'
