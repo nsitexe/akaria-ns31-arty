@@ -1,33 +1,6 @@
-/******************************************************************************/
-/*                                                                            */
-/* main.c -- PmodSF3 Example Project                                          */
-/*                                                                            */
-/******************************************************************************/
-/* Author: Andrew Holzer                                                      */
-/* Copyright 2017, Digilent Inc.                                              */
-/******************************************************************************/
-/* Module Description:                                                        */
-/*                                                                            */
-/* This file contains code for running a demonstration of the PmodSF3 IP      */
-/* core.                                                                      */
-/*                                                                            */
-/* This demo initializes the PmodSF3 drivers and then performs several        */
-/* self-tests, writing data into two sequential memory pages using different  */
-/* write commands and reads that data back out using each of the read         */
-/* commands.                                                                  */
-/*                                                                            */
-/******************************************************************************/
-/* Revision History:                                                          */
-/*                                                                            */
-/*    ??/??/????(AHolzer):  Created                                           */
-/*    07/26/2017(ArtVVB):   Refactored and Validated                          */
-/*    03/16/2018(atangzwj): Validated for Vivado 2017.4                       */
-/*                                                                            */
-/******************************************************************************/
 #include <stdio.h>
 #include "akaria_ns31_entry_kit.h"
 #include "akaria_PmodSF3.h"
-//#include "xspi.h"
 
 #include "akaria_ns_bsp_bin.h" /* Sample Code binary */
 
@@ -40,7 +13,7 @@ void akaria_flash_write() {
    XStatus Status;
 
    /* Initialize and Start SPI Driver */
-   Status = SF3_begin(&akariaSF3, SPI0_BASE_ADDR);
+   Status = akaria_SF3_Init(&akariaSF3, SPI0_BASE_ADDR);
    if (Status != XST_SUCCESS) {
       printf("Error initializing SF3 device\n");
       return;
@@ -51,7 +24,7 @@ void akaria_flash_write() {
    Status = Verify(&akariaSF3);
 
    if (Status != XST_SUCCESS) {
-      printf("Error Writing Flash Memory Tests\n\n");
+      printf("Flash Memory Write Error!\n\n");
    } else {
       printf("Writing Flash Memory Successful!\n\n");
    }
@@ -75,7 +48,7 @@ XStatus FlashWrite(PmodSF3* InstancePtr) {
    u32 reg;
 
    // Buffers require space to store SPI read/write commands as well as data
-   u8 WriteBuffer[SF3_PAGE_SIZE + SF3_WRITE_EXTRA_BYTES];
+   u8 WriteBuffer[SF3_PAGE_SIZE + AKARIA_SF3_WRITE_EXTRA_BYTES];
    u8 *WriteBufferPtr;
 
    Address = 0x00000000; /* Flash address */
@@ -89,22 +62,22 @@ XStatus FlashWrite(PmodSF3* InstancePtr) {
       // Fill in the data that is to be written into the Micron Serial Flash
       for (Index = 0; Index < SF3_PAGE_SIZE; Index++) {
          if(Index < WriteSize){
-            WriteBuffer[Index + SF3_WRITE_EXTRA_BYTES] = akaria_ns_bsp_bin[Address + Index];
+            WriteBuffer[Index + AKARIA_SF3_WRITE_EXTRA_BYTES] = akaria_ns_bsp_bin[Address + Index];
          } 
-         else  WriteBuffer[Index + SF3_WRITE_EXTRA_BYTES] = 0xff;
+         else  WriteBuffer[Index + AKARIA_SF3_WRITE_EXTRA_BYTES] = 0xff;
       }
 
       /* Sector Erase */
       if((Address % 0x10000) == 0){
          //printf("Sector Erase...(0x%x)\n", Address);
-         Status = SF3_FlashWriteEnable(InstancePtr);
+         Status = akaria_SF3_FlashWriteEnable(InstancePtr);
          if (Status != XST_SUCCESS) {
             printf("SPI Flash wait ready error\n");
             return XST_FAILURE;
          }
 
          // Perform the sector erase operation.
-         Status = SF3_SectorErase(InstancePtr, Address);
+         Status = akaria_SF3_SectorErase(InstancePtr, Address);
          if (Status != XST_SUCCESS) {
             printf("SPI Flash sector erase error\n");
             return XST_FAILURE;
@@ -113,7 +86,7 @@ XStatus FlashWrite(PmodSF3* InstancePtr) {
 
       /* Page Program */
       printf("Flash writing... (0x%x)\n", Address);
-      Status = SF3_FlashWriteEnable(InstancePtr);
+      Status = akaria_SF3_FlashWriteEnable(InstancePtr);
       if (Status != XST_SUCCESS) {
          printf("SPI Flash wait ready error\n");
          return XST_FAILURE;
@@ -121,7 +94,7 @@ XStatus FlashWrite(PmodSF3* InstancePtr) {
 
       // Write the data to the page using page program command.
       WriteBufferPtr = WriteBuffer;
-      Status = SF3_FlashWrite(InstancePtr, Address, SF3_PAGE_SIZE,
+      Status = akaria_SF3_FlashWrite(InstancePtr, Address, SF3_PAGE_SIZE,
             SF3_COMMAND_PAGE_PROGRAM, &WriteBufferPtr);
       if (Status != XST_SUCCESS) {
          printf("SPI Flash page write error\n");
@@ -145,10 +118,10 @@ XStatus Verify(PmodSF3* InstancePtr) {
    u32 reg;
 
    // Set Read Command
-   ReadCmd = SF3_COMMAND_READ;
+   ReadCmd = SF3_COMMAND_RANDOM_READ;
 
    // Buffers require space to store SPI read/write commands as well as data
-   u8 ReadBuffer[SF3_PAGE_SIZE + SF3_READ_MAX_EXTRA_BYTES];
+   u8 ReadBuffer[SF3_PAGE_SIZE + AKARIA_SF3_READ_MAX_EXTRA_BYTES];
    u8 *ReadBufferPtr;
    printf("Verifying...\n");
 
@@ -158,13 +131,13 @@ XStatus Verify(PmodSF3* InstancePtr) {
 
    while(RemainBytes > 0){
       // Clear the read buffer
-      for (Index = 0; Index < SF3_PAGE_SIZE + SF3_READ_MAX_EXTRA_BYTES; Index++) {
+      for (Index = 0; Index < SF3_PAGE_SIZE + AKARIA_SF3_READ_MAX_EXTRA_BYTES; Index++) {
          ReadBuffer[Index] = 0x0;
       }
 
       // Read the data from the page using random read command
       ReadBufferPtr = ReadBuffer;
-      Status = SF3_FlashRead(InstancePtr, Address, SF3_PAGE_SIZE,
+      Status = akaria_SF3_FlashRead(InstancePtr, Address, SF3_PAGE_SIZE,
             ReadCmd, &ReadBufferPtr);
       if (Status != XST_SUCCESS) {
          printf("SPI Flash read error\n");
