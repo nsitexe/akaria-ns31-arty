@@ -21,13 +21,13 @@ MFLAGS    = -march=rv32im -mabi=ilp32
 LFLAGS    = -static -L $(DIR_SYSROOT)/lib -Wl,-T,$(DIR_SYSROOT)/include/bmetal/generated/linker_gen.ld \
             -mcmodel=medany $(MFLAGS) -Xlinker -Map=$(MAP_FILE) \
             -Wl,--whole-archive,-lbmetal_crt,--no-whole-archive -lc
-INC_PATH  = -I./include -I./xspi
+INC_PATH  = -I./xspi -I../include -I./PmodSF3
 CFLAGS    = -c -g -O0 $(INC_PATH) $(MFLAGS)
 AFLAGS    = -c -g -O0 $(INC_PATH) $(MFLAGS)
 DEFINES   =
 
 # Source files
-CSRCS     = akaria_menu_table.c akaria_menu.c akaria_stdio.c akaria_PmodSF3.c akaria_sf3_test.c akaria_flash_write.c \
+CSRCS     = akaria_menu_table.c akaria_menu.c akaria_stdio.c akaria_PmodSF3.c akaria_flash_write.c \
             xspi/xil_assert.c xspi/xspi_options.c xspi/xspi_stats.c xspi/xspi.c \
 			main.c
 ASRCS     = 
