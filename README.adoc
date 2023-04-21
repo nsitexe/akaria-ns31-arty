@@ -47,11 +47,11 @@ When the build is complete, an ELF file (`akaria_ns_bsp.elf`) is generated.
 === Running the sample software
 ==== Launching the sample software
 
-. Set SW3(Boot ROM SPI) on the board to '0'
+. Set SW3(Boot ROM SPI) on the "ARTY" board to '0'
 
-. Connect the PC and Entry Kit with a USB cable
+. Connect the PC and the "ARTY" board with a USB cable
 
-. Connect the Entry Kit and Debugger
+. Connect the "ARTY" board and Debugger
 
 . Launch "Open OCD"
 

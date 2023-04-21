@@ -47,15 +47,15 @@ make generates an elf file of the sample app that tests Flash's Write/Read and w
 === Running the Flash Write Sample App
 ==== Launching the Flash Write Sample App
 
-. Set SW3(Boot ROM SPI) on the board to '0'
+. Set SW3(Boot ROM SPI) on the "ARTY" board to '0'
 
-. Connect the PC and Entry Kit with a USB cable
+. Connect the PC and the "ARTY" board with a USB cable
 
-. Connect the Entry Kit and Debugger
+. Connect the "ARTY" board and Debugger
 
 . Launch "Open OCD"
 
-. Open Terminal. (Set baudrate to 9600 bps)
+. Open terminal. (Set baudrate to 9600 bps)
 
 . Launch GDB.
 
@@ -68,6 +68,8 @@ make generates an elf file of the sample app that tests Flash's Write/Read and w
  (gdb) monitor reset halt
  (gdb) load
  (gdb) c
+
+. Push BTN0 to boot NS31A
 
 . A menu appears in the terminal. Enter the command you want to run
 +
@@ -90,8 +92,7 @@ Akaria>
 ....
 
 ==== Writing Boot Code
-Launch the Flash Write sample app and run the 'w' command to write the Boot Code to PModSF3.
-If the boot code is written successfully, the message "Writing Flash Memory Successful!" will be output.
+Launch the Flash Write sample app and run the 'w' command to write the Boot Code to PModSF3. If the boot code is written successfully, the message "Writing Flash Memory Successful!" will be output.
 
 .example
 ----
@@ -116,14 +117,17 @@ Akaria>
 
 === Boot from PModSF3
 
-. Change the board switches as follows.
+. Change the "ARTY" board switches as follows.
 * Set "NS31A Reset Vector" [SW1:SW0] to '10'
 * Set "Boot ROM SPI" [SW3] to '0'
 * Set "NS31A Boot Mode" [SW2] to '0'
 
-. Connect the PC and Entry Kit with a USB cable
+. Connect the PC and the "ARTY" board with a USB cable
+
 . Open Terminal. (Set baudrate to 9600 bps)
+
 . Push BTN0 to boot NS31A
+
 . A menu appears in the terminal. Enter the command you want to run
 +
 ....
