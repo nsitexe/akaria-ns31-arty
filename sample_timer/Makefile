@@ -1,4 +1,4 @@
-# SDK-P Setting
+# akaria-bmetal Setting
 DIR_SYSROOT=../../sysroot
 
 # Toolchain
