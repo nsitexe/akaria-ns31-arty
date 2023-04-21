@@ -69,7 +69,6 @@ XStatus FlashWrite(PmodSF3* InstancePtr) {
 
       /* Sector Erase */
       if((Address % 0x10000) == 0){
-         //printf("Sector Erase...(0x%x)\n", Address);
          Status = akaria_SF3_FlashWriteEnable(InstancePtr);
          if (Status != XST_SUCCESS) {
             printf("SPI Flash wait ready error\n");
