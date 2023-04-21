@@ -17,9 +17,18 @@ XSpi_Config Akaria_XSpi_SF3Config = {
    16                   /* FifosDepth */
 };
 
+/* Prototype declarations for functions used internally */
 XStatus akaria_SPI_Init(XSpi *SpiPtr);
 XStatus akaria_SF3_GetStatus(PmodSF3 *InstancePtr);      
 XStatus akaria_SF3_WaitForFlashReady(PmodSF3 *InstancePtr);
+
+/*-------------------------------------------------------------------------------------------------------*/
+/* Name      akaria_SF3_Init                                                                             */
+/* Function  initializes the SF3 device and attaches and starts it's SPI driver                          */
+/* Arg[1]    PmodSF3 * : A pointer to the instance of the SF3 device.                                    */
+/* Arg[2]    u32 : The base address of the SF3 SPI device.                                               */
+/* Return    XStatus : XST_SUCCESS if successful else XST_FAILURE.                                       */
+/*-------------------------------------------------------------------------------------------------------*/
 
 XStatus akaria_SF3_Init(PmodSF3 *InstancePtr, u32 SPI_Address) {
    XStatus Status;
@@ -41,6 +50,12 @@ XStatus akaria_SF3_Init(PmodSF3 *InstancePtr, u32 SPI_Address) {
    return XST_SUCCESS;
 }
 
+/*-------------------------------------------------------------------------------------------------------*/
+/* Name      akaria_SPI_Init                                                                             */
+/* Function  Initializes the SPI and performs a self test to ensure that the HW was set correctly        */
+/* Arg[1]    XSpi * : A pointer to the instance of the SPI device.                                       */
+/* Return    XStatus : XST_SUCCESS if successful else XST_FAILURE.                                       */
+/*-------------------------------------------------------------------------------------------------------*/
 XStatus akaria_SPI_Init(XSpi *SpiPtr) {
    XStatus Status;
    XSpi_Config *ConfigPtr;
@@ -76,6 +91,12 @@ XStatus akaria_SPI_Init(XSpi *SpiPtr) {
    return XST_SUCCESS;
 }
 
+/*-------------------------------------------------------------------------------------------------------*/
+/* Name      akaria_SF3_FlashWriteEnable                                                                 */
+/* Function  enables writes to the Serial Flash memory.                                                  */
+/* Arg[1]    PmodSF3 * : A pointer to the instance of the PmodSF3 device.                                */
+/* Return    XStatus : XST_SUCCESS if successful else XST_FAILURE.                                       */
+/*-------------------------------------------------------------------------------------------------------*/
 XStatus akaria_SF3_FlashWriteEnable(PmodSF3 *InstancePtr) {
    XStatus Status;
    u8 Buffer[SF3_WRITE_ENABLE_BYTES];
@@ -96,6 +117,18 @@ XStatus akaria_SF3_FlashWriteEnable(PmodSF3 *InstancePtr) {
    return XST_SUCCESS;
 }
 
+/*-------------------------------------------------------------------------------------------------------*/
+/* Name      akaria_SF3_FlashWrite                                                                       */
+/* Function  Writes the data to the specified locations in the Serial Flash memory.                      */
+/* Arg[1]    PmodSF3 * : A pointer to the instance of the PmodSF3 device.                                */
+/* Arg[2]    u32       : The address in the Buffer, where to write the data.                             */
+/* Arg[3]    u32       : The number of bytes to be written.                                              */
+/* Arg[4]    u8        : Selects which command to use to write with.                                     */
+/* Arg[5]    u8 **     : The pointer to a data buffer                                                    */
+/*                       (minimum size ByteCount + AKARIA_SF3_WRITE_EXTRA_BYTES).                        */
+/* Return    XStatus   : XST_SUCCESS if successful else XST_FAILURE.                                     */
+/* Note      The Buffer at BufferPtr is moved forward by the number of command bytes used.               */
+/*-------------------------------------------------------------------------------------------------------*/
 XStatus akaria_SF3_FlashWrite(PmodSF3 *InstancePtr, u32 Addr, u32 ByteCount,
       u8 WriteCmd, u8 **BufferPtr) {
    XStatus Status;
@@ -106,7 +139,6 @@ XStatus akaria_SF3_FlashWrite(PmodSF3 *InstancePtr, u32 Addr, u32 ByteCount,
    }
 
    // Prepare the buffer with write command data
-   // NS31A is 32bit Address mode
    (*BufferPtr)[0] = WriteCmd;
    (*BufferPtr)[1] = (u8) (Addr >> 24);
    (*BufferPtr)[2] = (u8) (Addr >> 16);
@@ -126,6 +158,18 @@ XStatus akaria_SF3_FlashWrite(PmodSF3 *InstancePtr, u32 Addr, u32 ByteCount,
    return XST_SUCCESS;
 }
 
+
+/*-------------------------------------------------------------------------------------------------------*/
+/* Name      akaria_SF3_FlashWrite                                                                       */
+/* Function  Reads the data from the Serial Flash Memory.                                                */
+/* Arg[1]    PmodSF3 * : A pointer to the instance of the PmodSF3 device.                                */
+/* Arg[2]    u32       : The starting address in the Flash Memory from which the data is to be read.     */
+/* Arg[3]    u32       : The number of bytes to be read.                                                 */
+/* Arg[4]    u8        : Selects which command to use to read with.                                      */
+/* Arg[5]    u8 **     : A pointer to the buffer which data is to be read into,                          */
+/*                       expected size of ByteCount + DummyBytes(ReadCmd).                               */
+/* Return    XStatus   : XST_SUCCESS if successful else XST_FAILURE.                                     */
+/*-------------------------------------------------------------------------------------------------------*/
 XStatus akaria_SF3_FlashRead(PmodSF3 *InstancePtr, u32 Addr, u32 ByteCount, u8 ReadCmd,
       u8 **BufferPtr) {
    XStatus Status;
@@ -136,7 +180,6 @@ XStatus akaria_SF3_FlashRead(PmodSF3 *InstancePtr, u32 Addr, u32 ByteCount, u8 R
    }
 
    // Prepare the buffer with the command data
-   // 4-byte Address Mode
    (*BufferPtr)[0] = ReadCmd;
    (*BufferPtr)[1] = (u8) (Addr >> 24);
    (*BufferPtr)[2] = (u8) (Addr >> 16);
@@ -155,6 +198,14 @@ XStatus akaria_SF3_FlashRead(PmodSF3 *InstancePtr, u32 Addr, u32 ByteCount, u8 R
    return XST_SUCCESS;
 }
 
+
+/*-------------------------------------------------------------------------------------------------------*/
+/* Name      akaria_SF3_BulkErase                                                                        */
+/* Function  Erases the entire contents of the Serial Flash Memory.                                      */
+/* Arg[1]    PmodSF3 * : A pointer to the instance of the PmodSF3 device.                                */
+/* Return    XStatus   : XST_SUCCESS if successful else XST_FAILURE.                                     */
+/* Note      The erased bytes will read as 0xFF.                                                         */
+/*-------------------------------------------------------------------------------------------------------*/
 XStatus akaria_SF3_BulkErase(PmodSF3 *InstancePtr) {
    XStatus Status;
    u8 Buffer[SF3_BULK_ERASE_BYTES];
@@ -175,6 +226,14 @@ XStatus akaria_SF3_BulkErase(PmodSF3 *InstancePtr) {
    return XST_SUCCESS;
 }
 
+/*-------------------------------------------------------------------------------------------------------*/
+/* Name      akaria_SF3_SectorErase                                                                      */
+/* Function  Erases the contents of an entire 64KB sector.                                               */
+/* Arg[1]    PmodSF3 * : A pointer to the instance of the PmodSF3 device.                                */
+/* Arg[2]    u32       : the address of the first byte in the sector to be erased.                       */
+/* Return    XStatus   : XST_SUCCESS if successful else XST_FAILURE.                                     */
+/* Note      The erased bytes will read as 0xFF.                                                         */
+/*-------------------------------------------------------------------------------------------------------*/
 XStatus akaria_SF3_SectorErase(PmodSF3 *InstancePtr, u32 Addr) {
    XStatus Status;
    u8 Buffer[SF3_SECTOR_ERASE_BYTES];
@@ -201,6 +260,14 @@ XStatus akaria_SF3_SectorErase(PmodSF3 *InstancePtr, u32 Addr) {
    return XST_SUCCESS;
 }
 
+/*-------------------------------------------------------------------------------------------------------*/
+/* Name      akaria_SF3_GetStatus                                                                        */
+/* Function  Captures the status register of the SF3 and stores it in InstancePtr->Status.               */
+/* Arg[1]    PmodSF3 * : A pointer to the instance of the PmodSF3 device.                                */
+/* Return    XStatus   : XST_SUCCESS if successful else XST_FAILURE.                                     */
+/* Note      This function reads the status register of the Buffer and waits until the WIP bit of the    */
+/*           status register becomes 0.                                                                  */
+/*-------------------------------------------------------------------------------------------------------*/
 XStatus akaria_SF3_GetStatus(PmodSF3 *InstancePtr) {
    XStatus Status;
 
@@ -219,6 +286,14 @@ XStatus akaria_SF3_GetStatus(PmodSF3 *InstancePtr) {
    return XST_SUCCESS;
 }
 
+/*-------------------------------------------------------------------------------------------------------*/
+/* Name      akaria_SF3_WaitForFlashReady                                                                */
+/* Function  Waits until the serial Flash is ready to accept next command.                               */
+/* Arg[1]    PmodSF3 * : A pointer to the instance of the PmodSF3 device.                                */
+/* Return    XStatus   : XST_SUCCESS if successful else XST_FAILURE.                                     */
+/* Note      This function reads the status register of the Buffer and waits until the WIP bit of the    */
+/*           status register becomes 0.                                                                  */
+/*-------------------------------------------------------------------------------------------------------*/
 XStatus akaria_SF3_WaitForFlashReady(PmodSF3 *InstancePtr) {
    XStatus Status;
    u8 StatusReg;
@@ -246,6 +321,12 @@ XStatus akaria_SF3_WaitForFlashReady(PmodSF3 *InstancePtr) {
    return XST_SUCCESS;
 }
 
+/*-------------------------------------------------------------------------------------------------------*/
+/* Name      akaria_SF3_ReadID                                                                           */
+/* Function  Reads the ID register of the serial Flash                                                   */
+/* Arg[1]    PmodSF3 * : A pointer to the instance of the PmodSF3 device.                                */
+/* Return    XStatus   : XST_SUCCESS if successful else XST_FAILURE.                                     */
+/*-------------------------------------------------------------------------------------------------------*/
 XStatus akaria_SF3_ReadID(PmodSF3 *InstancePtr) {
    XStatus Status;
    int i;
