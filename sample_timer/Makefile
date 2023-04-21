@@ -2,9 +2,6 @@
 DIR_SYSROOT=../../sysroot
 
 # Toolchain
-# RV_PREFIX = riscv32-unknown-elf-
-# RV_PREFIX = /home/katano/tools/riscv_entry_kit/bin/riscv64-unknown-elf-
-# RV_PREFIX = /opt/riscv/bin/riscv64-unknown-elf-
 RV_PREFIX = riscv64-unknown-elf-
 CC        = $(RV_PREFIX)gcc
 CPP       = $(RV_PREFIX)cpp
