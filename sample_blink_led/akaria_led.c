@@ -1,5 +1,5 @@
 #include "akaria_ns31.h"
-#include "akaria_ns31_entry_kit.h"
+#include "akaria_ns31_arty.h"
 
 void  akaria_led_init(void){
   volatile unsigned int *p_GPIO_TRI  = (unsigned int *)GPIO_TRI;

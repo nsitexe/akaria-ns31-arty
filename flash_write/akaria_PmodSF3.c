@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "akaria_ns31_entry_kit.h"
+#include "akaria_ns31_arty.h"
 #include "akaria_PmodSF3.h"
 
 XSpi_Config Akaria_XSpi_SF3Config = {

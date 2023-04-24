@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "akaria_ns31.h"
-#include "akaria_ns31_entry_kit.h"
+#include "akaria_ns31_arty.h"
 
 /*-------------------------------------------------------------------------------------------------------*/
 // Name      akaria_clock

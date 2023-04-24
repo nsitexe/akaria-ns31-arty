@@ -7,16 +7,13 @@ CC        = $(RV_PREFIX)gcc
 CPP       = $(RV_PREFIX)cpp
 
 # Output files
-OUT_FILE  = akaria_ns_bsp
+OUT_FILE  = sample_timer
 MAP_FILE  = $(OUT_FILE).map
 EXE_FILE  = $(OUT_FILE).elf
 DIS_FILE  = $(OUT_FILE).dis
-BIN_FILE  = $(OUT_FILE).bin
-BIN_TEXT  = $(OUT_FILE)_bin.h
-
 
 # Compiler options
-MFLAGS    = -march=rv32im -mabi=ilp32
+MFLAGS    = -march=rv32imafc -mabi=ilp32f
 LFLAGS    = -static -L $(DIR_SYSROOT)/lib -Wl,-T,$(DIR_SYSROOT)/include/bmetal/generated/linker_gen.ld \
             -mcmodel=medany $(MFLAGS) -Xlinker -Map=$(MAP_FILE) \
             -Wl,--whole-archive,-lbmetal_crt,--no-whole-archive -lc
@@ -54,22 +51,8 @@ $(EXE_FILE):
 $(DIS_FILE): $(EXE_FILE)
 	$(RV_PREFIX)objdump -D $(EXE_FILE) > $(DIS_FILE)
 
-
-# Binary File to write SPI Flash
-$(BIN_FILE): $(EXE_FILE)
-	$(RV_PREFIX)objcopy -O binary --only-section=.reset --only-section=.text\
-    --only-section=.comm --only-section=.initdata --only-section=.auxdata --only-section=.rodata\
-    --only-section=.init_array --only-section=.fini_array --only-section=.data --only-section=.sdata\
-	$(EXE_FILE) $(BIN_FILE)
-
-# Header file to write SPI Flash
-.PHONY: bin_header
-bin_header: $(BIN_FILE)
-	xxd -i -c 16 $(BIN_FILE) > $(BIN_TEXT)
-	sed -i "s/unsigned/const unsigned/" $(BIN_TEXT)
-
 # Remove output files and .o files
 clean:
-	rm $(EXE_FILE) $(DIS_FILE) $(OBJS) $(MAP_FILE) $(BIN_FILE) $(BIN_TEXT)
+	rm $(EXE_FILE) $(DIS_FILE) $(OBJS) $(MAP_FILE)
 
 

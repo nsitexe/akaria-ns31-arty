@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "akaria_ns31_entry_kit.h"
+#include "akaria_ns31_arty.h"
 #include "akaria_PmodSF3.h"
 
 #include "akaria_ns_bsp_bin.h" /* Sample Code binary */

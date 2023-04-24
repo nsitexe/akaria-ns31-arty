@@ -16,7 +16,7 @@ BIN_TEXT  = $(OUT_FILE)_bin.h
 
 
 # Compiler options
-MFLAGS    = -march=rv32im -mabi=ilp32
+MFLAGS    = -march=rv32imafc -mabi=ilp32f
 LFLAGS    = -static -L $(DIR_SYSROOT)/lib -Wl,-T,$(DIR_SYSROOT)/include/bmetal/generated/linker_gen.ld \
             -mcmodel=medany $(MFLAGS) -Xlinker -Map=$(MAP_FILE) \
             -Wl,--whole-archive,-lbmetal_crt,--no-whole-archive -lc
@@ -70,6 +70,6 @@ bin_header: $(BIN_FILE)
 
 # Remove output files and .o files
 clean:
-	rm $(EXE_FILE) $(DIS_FILE) $(OBJS) $(MAP_FILE) $(BIN_FILE) $(BIN_TEXT)
+	rm -f $(EXE_FILE) $(DIS_FILE) $(OBJS) $(MAP_FILE) $(BIN_FILE) $(BIN_TEXT)
 
 
