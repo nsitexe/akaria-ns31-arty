@@ -6,9 +6,6 @@
 
 int main(void){
 
-  // LED Init
-  akaria_led_init();
-  
   printf("\n");
   printf("#####################################################################\n");
   printf("#                                                                   #\n");

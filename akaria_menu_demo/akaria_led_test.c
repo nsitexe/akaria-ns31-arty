@@ -6,7 +6,6 @@
 void akaria_led_test(void){
   int i;
   
-  akaria_led_init();
   akaria_led_on(LED0);
   akaria_wait(500);
   akaria_led_on(LED1);
