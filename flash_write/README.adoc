@@ -1,8 +1,8 @@
-= akaria-bmetal Flash Write sample code readme
+= Flash Write sample readme
 
 == Overview
 
-This sample code is for writing a boot program.
+This sample code is for writing a boot program to PmodSF3 (SPI Flash).
 
 == How to use
 
@@ -21,7 +21,7 @@ $ cd ../test/akaria_ns31_arty/akaria_menu_demo
 $ make bin_header
 ....
 +
-make generates elf files (akaria_ns_bsp.elf), binary files (akaria_ns_bsp.bin) and header file (akaria_ns_bsp_bin.h).
+make generates elf files (`akaria_ns_bsp.elf`), binary files (`akaria_ns_bsp.bin`) and header file (`akaria_ns_bsp_bin.h`).
 
 . Copy akaria_ns_bsp_bin.h to "test/akaria_ns31_arty/flash_write" directory.
 
@@ -47,13 +47,13 @@ make generates an elf file of the sample app that tests Flash's Write/Read and w
 === Running the Flash Write Sample App
 ==== Launching the Flash Write Sample App
 
-. Connect PmodSF2 NOR flash to Pmod connector JB on Arty-A7 Board
+. Connect Pmod SF3 NOR flash to Pmod connector JB on Arty-A7 Board
 
-. Set SW3(Boot ROM SPI) on the "ARTY" board to '0'
+. Set SW3(Boot ROM SPI) on the Arty-A7 Board to '0'
 
-. Connect the PC and the "ARTY" board with a USB cable
+. Connect the PC and the Arty-A7 Board with a USB cable
 
-. Connect the "ARTY" board and Debugger
+. Connect the Arty-A7 Board and Debugger
 
 . Launch "Open OCD"
 
@@ -94,7 +94,7 @@ Akaria>
 ....
 
 ==== Writing Boot Code
-Launch the Flash Write sample app and run the 'w' command to write the Boot Code to PModSF3. If the boot code is written successfully, the message "Writing Flash Memory Successful!" will be output.
+Launch the Flash Write sample app and run the 'w' command to write the Boot Code to Pmod SF3. If the boot code is written successfully, the message "Writing Flash Memory Successful!" will be output.
 
 .example
 ----
@@ -117,14 +117,14 @@ Akaria>
 ----
 
 
-=== Boot from PModSF3
+=== Boot from Pmod SF3
 
-. Change the "ARTY" board switches as follows.
+. Change the Arty-A7 Board switches as follows.
 * Set "NS31A Reset Vector" [SW1:SW0] to '10'
 * Set "Boot ROM SPI" [SW3] to '0'
 * Set "NS31A Boot Mode" [SW2] to '0'
 
-. Connect the PC and the "ARTY" board with a USB cable
+. Connect the PC and the Arty-A7 Board with a USB cable
 
 . Open Terminal. (Set baudrate to 9600 bps)
 

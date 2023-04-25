@@ -8,7 +8,7 @@ This is sample softwares for Akaria NS31A CPU family. To use this sample softwar
 * CUI Menu Demo (`akaria_menu_demo/`)
   - A simple example demo of CUI.  
 * Flash Write sample (`flash_write/`)
-  - A simple example how to write boot program to PmodSF3 (SPI Flash).
+  - A simple example how to write boot program to Pmod SF3 (SPI Flash).
 * Blinking LED sample (`sample_blink_led/`)
   - A simple example of blinking LEDs on the board.
 * Timer sample (`sample_timer/`)
@@ -33,7 +33,7 @@ Run the command below to build the sample code.
 .example (`akaria_menu_demo/`)
 ....
 $ cd work/akaria-bmetal
-$ rm -r build     #if build directory exists
+$ rm -r build     #if the build directory already exists
 $ mkdir build && cd build
 $ cmake ../ -G Ninja -DARCH=riscv -DCROSS_COMPILE=riscv64-unknown-elf- -DCC=gcc -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=../test/sysroot/ -DDEFCONF=riscv_nsitexe_ns31_arty
 $ ninja install
@@ -47,11 +47,11 @@ When the build is complete, an ELF file (`akaria_ns_bsp.elf`) is generated.
 === Running the sample software
 ==== Launching the sample software
 
-. Set SW3(Boot ROM SPI) on the "ARTY" board to '0', because SW3=1 is reserved
+. Set SW3(Boot ROM SPI) on the Arty-A7 Board to '0', because SW3=1 is reserved
 
-. Connect the PC and the "ARTY" board with a USB cable
+. Connect the PC and the Arty-A7 Board with a USB cable
 
-. Connect the "ARTY" board and Debugger
+. Connect the Arty-A7 Board and Debugger
 
 . Launch "Open OCD"
 
