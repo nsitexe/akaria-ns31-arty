@@ -47,6 +47,8 @@ make generates an elf file of the sample app that tests Flash's Write/Read and w
 === Running the Flash Write Sample App
 ==== Launching the Flash Write Sample App
 
+. Connect PmodSF2 NOR flash to Pmod connector JB on Arty-A7 Board
+
 . Set SW3(Boot ROM SPI) on the "ARTY" board to '0'
 
 . Connect the PC and the "ARTY" board with a USB cable
@@ -69,7 +71,7 @@ make generates an elf file of the sample app that tests Flash's Write/Read and w
  (gdb) load
  (gdb) c
 
-. Push BTN0 to boot NS31A
+. Push BTN0 to boot NS31A (When you set SW2=0)
 
 . A menu appears in the terminal. Enter the command you want to run
 +

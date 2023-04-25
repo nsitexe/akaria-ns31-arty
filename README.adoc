@@ -47,7 +47,7 @@ When the build is complete, an ELF file (`akaria_ns_bsp.elf`) is generated.
 === Running the sample software
 ==== Launching the sample software
 
-. Set SW3(Boot ROM SPI) on the "ARTY" board to '0'
+. Set SW3(Boot ROM SPI) on the "ARTY" board to '0', because SW3=1 is reserved
 
 . Connect the PC and the "ARTY" board with a USB cable
 
@@ -68,8 +68,9 @@ When the build is complete, an ELF file (`akaria_ns_bsp.elf`) is generated.
  (gdb) monitor reset halt
  (gdb) load
  (gdb) c
+ * When "load" is executed, The PC is set to program start address.
 
-. Push BTN0 to boot NS31A
+. Push BTN0 to boot NS31A (When you set SW2=0)
 
 . Each sample software starts.
 +
