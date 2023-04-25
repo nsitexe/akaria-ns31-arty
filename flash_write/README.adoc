@@ -2,7 +2,7 @@
 
 == Overview
 
-This sample code is for writing a boot program to PmodSF3 (SPI Flash).
+This sample code is for writing a boot program to Pmod SF3 (SPI Flash).
 
 == How to use
 
