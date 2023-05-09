@@ -37,7 +37,7 @@ $ rm -r build     #if the build directory already exists
 $ mkdir build && cd build
 $ cmake ../ -G Ninja -DARCH=riscv -DCROSS_COMPILE=riscv64-unknown-elf- -DCC=gcc -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=../test/sysroot/ -DDEFCONF=riscv_nsitexe_ns31_arty
 $ ninja install
-$ cd ../test/akaria_ns31_arty/akaria_menu_demo
+$ cd ../test/akaria-ns31-arty/akaria_menu_demo
 $ make
 ....
 

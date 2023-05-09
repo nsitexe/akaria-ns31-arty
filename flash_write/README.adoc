@@ -17,13 +17,13 @@ $ rm -r build    #if the build directory already exists
 $ mkdir build && cd build
 $ cmake ../ -G Ninja -DARCH=riscv -DCROSS_COMPILE=riscv64-unknown-elf- -DCC=gcc -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=../test/sysroot/ -DDEFCONF=riscv_nsitexe_ns31_arty_flash
 $ ninja install
-$ cd ../test/akaria_ns31_arty/akaria_menu_demo
+$ cd ../test/akaria-ns31-arty/akaria_menu_demo
 $ make bin_header
 ....
 +
 make generates elf files (`akaria_ns_bsp.elf`), binary files (`akaria_ns_bsp.bin`) and header file (`akaria_ns_bsp_bin.h`).
 
-. Copy akaria_ns_bsp_bin.h to "test/akaria_ns31_arty/flash_write" directory.
+. Copy akaria_ns_bsp_bin.h to "test/akaria-ns31-arty/flash_write" directory.
 
  $ cp akaria_ns_bsp_bin.h ../flash_write/
 
@@ -38,7 +38,7 @@ $ rm -r build
 $ mkdir build && cd build
 $ cmake ../ -G Ninja -DARCH=riscv -DCROSS_COMPILE=riscv64-unknown-elf- -DCC=gcc -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=../test/sysroot/ -DDEFCONF=riscv_nsitexe_ns31_arty
 $ ninja install
-$ cd ../test/akaria_ns31_arty/flash_write
+$ cd ../test/akaria-ns31-arty/flash_write
 $ make
 ....
 +
